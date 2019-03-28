@@ -1,0 +1,37 @@
+{
+    "id": "1a8623d7-1d5c-423c-9d92-5e9587bbb02a",
+    "name": "CreateBlueprint",
+    "friendlyName": "Create Azure Blueprint",
+    "description": "Creates an Azure Blueprint",
+    "helpMarkDown": "",
+    "category": "Build",
+    "visibility": [
+        "Preview",
+        "Build",
+        "Release"
+    ],
+    "author": "Neil Peterson",
+    "version": {
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Create Azure Blueprint",
+    "inputs": [
+        {
+            "name": "name",
+            "type": "string",
+            "label": "Name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Enter your name to print to the console"
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "$(currentDirectory)\\powershell.ps1",
+            "argumentFormat": "",
+            "workingDirectory": "$(currentDirectory)"
+        }
+    }
+}
