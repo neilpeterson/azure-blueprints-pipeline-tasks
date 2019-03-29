@@ -1,0 +1,54 @@
+{
+    "id": "35d27b4a-51dc-4eca-85a6-5635231b613d",
+    "name": "AssignBlueprint",
+    "friendlyName": "Assign Azure Blueprint",
+    "description": "Assigns an Azure Blueprint",
+    "helpMarkDown": "",
+    "category": "Build",
+    "visibility": [
+        "Preview",
+        "Build",
+        "Release"
+    ],
+    "author": "Neil Peterson",
+    "version": {
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Assign Azure Blueprint",
+    "inputs": [
+        {
+			"name": "ConnectedServiceName",
+			"aliases": ["azureSubscription"],
+			"type": "connectedService:AzureRM",
+			"label": "Azure Subscription",
+			"defaultValue": "",
+			"required": true,
+			"helpMarkDown": "Select the Azure Resource Manager subscription"
+		},
+        {
+            "name": "BPName",
+            "type": "string",
+            "label": "Blueprint Name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Enter the Blueprint name."
+        },
+        {
+            "name": "MGName",
+            "type": "string",
+            "label": "Management Group Name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Enter the name of the Management Group where the Blueprint will be created at."
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "$(currentDirectory)\\assignBlueprint.ps1",
+            "argumentFormat": "",
+            "workingDirectory": "$(currentDirectory)"
+        }
+    }
+}
