@@ -1,0 +1,214 @@
+{
+    "id": "fcb01bc0-94ed-11e8-a5eb-2d1af24f1cb4",
+    "name": "AzureAutomationRunbooks",
+    "friendlyName": "Azure Automation Runbooks",
+    "description": "Import runbooks to your Automation Account and start runbook jobs",
+    "helpMarkDown": "[More Information](https://github.com/azureautomation/vststasks)",
+    "category": "Deploy",
+      "visibility": [
+          "Preview",
+          "Build",
+          "Release"
+      ],
+
+    "author": "Microsoft Corporation",
+    "version": {
+      "Major": 1,
+      "Minor": 0,
+      "Patch": 0
+    },
+    "demands": [
+      "azureps"
+    ],
+    "minimumAgentVersion": "1.95.0",
+    "inputs": [
+    {
+        "name": "ConnectedServiceName",
+        "aliases": ["azureSubscription"],
+        "type": "connectedService:AzureRM",
+        "label": "Azure Subscription",
+        "defaultValue": "",
+        "required": true,
+        "helpMarkDown": "Select the Azure Resource Manager subscription"
+    },
+    {
+      "name": "ResourceGroupName",
+      "type": "pickList",
+      "label": "Resource Group",
+      "defaultValue": "",
+      "required": true,
+      "properties": {
+          "EditableOptions": "True"
+      },
+      "helpMarkDown": "Enter or select the Azure Resource Group that contains the Automation account"
+    },
+    {
+      "name": "AutomationAccountName",
+      "type": "pickList",
+      "label": "Automation Account",
+      "required": true,
+      "properties": {
+          "EditableOptions": "True"
+      },
+      "helpMarkDown": "Enter or select the Automation Account to deploy to"
+    },
+    {
+      "name": "RunbookLocation",
+      "type": "radio",
+      "label": "",
+      "defaultValue": "",
+      "required": true,
+      "options": {
+        "RunbookFromArtifacts": "Import/start runbook",
+        "RunbookFromAutomation": "Start pre-existing runbook from Automation"
+      }
+    },
+    {
+      "name": "RunbookFile",
+      "type": "filepath",
+      "label": "Provide runbook(s) from build artifacts",
+      "defaultValue": "",
+      "required": false,
+      "visibleRule": "RunbookLocation = RunbookFromArtifacts",
+      "helpMarkDown": "Provide a runbook from your artifacts folder or choose a runbook from your Automation Account above"
+    },
+    {
+      "name": "AutomationRunbook",
+      "type": "pickList",
+      "label": "Choose runbook from Automation Account",
+      "defaultValue": "",
+      "required": false,
+      "properties": {
+        "EditableOptions": "True"
+      },
+      "visibleRule": "RunbookLocation = RunbookFromAutomation",
+      "helpMarkDown": "Choose a runbook from your Automation Account or provide a different runbook below"
+    },
+    {
+      "name": "StartRunbookJob",
+      "type": "boolean",
+      "label": "Start Runbook Job",
+      "defaultValue": false,
+      "required": false,
+      "visibleRule": "RunbookLocation = RunbookFromArtifacts",
+      "helpMarkDown": "Select the checkbox if you want to start the runbook you are specifying"
+    },
+    {
+      "name": "RunbookToStart",
+      "type": "string",
+      "label": "Name of runbook to start",
+      "defaultValue": "",
+      "required": false,
+      "visibleRule": "RunbookLocation = RunbookFromArtifacts && StartRunbookJob = true",
+      "helpMarkDown": "If you have provided a folder of runbooks to import instead of a single runbook script, specify the name of the runbook from the folder you want to run"
+    },
+    {
+      "name": "RunbookParameters",
+      "type": "radio",
+      "label": "",
+      "defaultValue": "",
+      "required": false,
+      "visibleRule": "StartRunbookJob = true || RunbookLocation = RunbookFromAutomation",
+      "options": {
+        "None": "No parameters",
+        "RunbookParametersFile": "Specify parameters file",
+        "RunbookParametersInJson": "Enter parameters as json"
+      }
+    },
+    {
+      "name": "RunbookParametersFile",
+      "type": "filePath",
+      "label": "Runbook parameters file",
+      "defaultValue": "",
+      "required": false,
+      "visibleRule": "RunbookParameters = RunbookParametersFile",
+      "helpMarkDown": "Specify any parameters for the runbook in a json file"
+    },
+    {
+      "name": "RunbookParametersInJson",
+      "type": "multiline",
+      "label": "Runbook parameters in Json",
+      "defaultValue": "",
+      "required": false,
+      "visibleRule": "RunbookParameters = RunbookParametersInJson",
+      "helpMarkDown": "Specify any parameters for the runbook as json. Example {\"Name\":  \"Hello World\"}"
+    },
+    {
+      "name": "HybridWorker",
+      "type": "radio",
+      "label": "Run On",
+      "defaultValue": "Azure",
+      "required": false,
+      "options": {
+        "Azure": "Azure",
+        "Other": "Specify a hybrid worker"
+      },
+      "helpMarkDown": "Choose a hybrid worker to run on. If a hybrid worker group is not specified, the job will run in Azure"
+    },
+    {
+      "name": "SpecifiedRunOn",
+      "type": "pickList",
+      "defaultValue": "",
+      "label": "Hybrid worker",
+      "required": false,
+      "properties": {
+        "EditableOptions": "True"
+      },
+      "visibleRule": "HybridWorker = Other",
+      "helpMarkDown": "Specify your own Run On"
+    }
+  ],
+  "outputVariables": [
+    {
+      "name": "jobOutput",
+      "description": "The output of the runbook job"
+    }
+  ],
+    "dataSourceBindings": [
+      {
+        "target": "ResourceGroupName",
+        "endpointId": "$(ConnectedServiceName)",
+        "dataSourceName": "AzureResourceGroups"
+      },
+      {
+        "name": "AutomationAccounts",
+        "target": "AutomationAccountName",
+        "endpointId": "$(ConnectedServiceName)",
+        "EndpointUrl": "{{endpoint.url}}/subscriptions/$(endpoint.subscriptionId)/resourceGroups/$(ResourceGroupName)/providers/Microsoft.Automation/automationAccounts?api-version=2015-10-31",
+        "resultSelector": "jsonpath:$.value[*].name",
+        "parameters": {
+          "ResourceGroupName": "$(ResourceGroupName)"
+        }
+      },
+      {
+        "name": "AutomationRunbook",
+        "target": "AutomationRunbook",
+        "endpointId": "$(ConnectedServiceName)",
+        "EndpointUrl": "{{endpoint.url}}/subscriptions/$(endpoint.subscriptionId)/resourceGroups/$(ResourceGroupName)/providers/Microsoft.Automation/automationAccounts/$(AutomationAccountName)/runbooks?api-version=2015-10-31",
+        "resultSelector": "jsonpath:$.value[*].name",
+        "parameters": {
+          "ResourceGroupName": "$(ResourceGroupName)",
+          "AutomationAccountName": "$(AutomationAccountName)"
+        }
+      },
+      {
+        "name": "RunOn",
+        "target": "SpecifiedRunOn",
+        "endpointId": "$(ConnectedServiceName)",
+        "EndpointUrl": "{{endpoint.url}}/subscriptions/$(endpoint.subscriptionId)/resourceGroups/$(ResourceGroupName)/providers/Microsoft.Automation/automationAccounts/$(AutomationAccountName)/hybridRunbookWorkerGroups?$filter=groupType%20eq%20'User'&api-version=2018-01-15",
+        "resultSelector": "jsonpath:$.value[*].name",
+        "parameters": {
+          "ResourceGroupName": "$(ResourceGroupName)",
+          "AutomationAccountName": "$(AutomationAccountName)"
+        }
+      }
+    ],
+    "instanceNameFormat": "Azure Automation Runbooks",
+    "execution": {
+      "AzurePowerShell": {
+        "target": "$(currentDirectory)\\DeployAzureAutomationRunbook.ps1",
+        "argumentFormat": "",
+        "workingDirectory": "$(currentDirectory)"
+      }
+    }
+  }

@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 0,
-		"Patch": 0
+		"Patch": 8
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -26,23 +26,55 @@
 			"required": true,
 			"helpMarkDown": "Select the Azure Resource Manager subscription"
 		},
-        {
-            "name": "BPName",
-            "type": "string",
-            "label": "Blueprint Name",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Enter the Blueprint name."
-        },
-        {
-            "name": "MGName",
-            "type": "string",
-            "label": "Management Group Name",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Enter the name of the Management Group where the Blueprint will be created at."
-        }
+		{
+			"name": "BPName",
+			"type": "string",
+			"label": "Blueprint Name",
+			"defaultValue": "",
+			"required": true,
+			"helpMarkDown": "Enter the Blueprint name."
+		},
+		{
+			"name": "scope",
+			"type": "radio",
+			"label": "Definition Location",
+			"defaultValue": "",
+			"required": true,
+			"options": {
+				"managementGroup": "Management Group",
+				"subscription": "Subscription"
+			},
+			"helpMarkDown": "Select the scope at which the blueprint will be created. Learn more at aka.ms/BlueLocation"
+		},
+		{
+			"name": "MGName",
+			"type": "string",
+			"label:": "Choose from Management Group",
+			"defaultValue": "",
+			"required": false,
+			"visibleRule": "scope = managementGroup",
+			"helpMarkDown": "Management group where the blueprint definition is saved"
+		},
+		{
+			"name": "subscriptionName",
+			"type": "pickList",
+			"label:": "Choose from Subscription",
+			"defaultValue": "",
+			"required": false,
+			"visibleRule": "scope = subscription",
+			"helpMarkDown": "Subscription where the blueprint definition is saved. Learn more at aka.ms/BlueLocation"
+		}
 	],
+	"dataSourceBindings": [{
+		"name": "ManagementGroup",
+		"target": "MGName",
+		"endpointId": "$(ConnectedServiceName)",
+		"EndpointUrl": "https://management.azure.com/providers/Microsoft.Management/managementGroups?api-version=2018-03-01-preview",
+		"resultSelector": "jsonpath:$.value[*].Name",
+		"parameters": {
+
+		}
+	}],
 	"execution": {
 		"PowerShell3": {
 			"target": "$(currentDirectory)\\createBlueprint.ps1",

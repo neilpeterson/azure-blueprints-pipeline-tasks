@@ -58,7 +58,6 @@ if (!$pubBP.value[$pubBP.value.Count - 1].name) {
 $allArtifacts = Get-ChildItem $ArtifactPath
 
 foreach ($item in $allArtifacts) {
-   write-host "$ArtifactPath/$item"
    $body = Get-Content -Raw -Path "$ArtifactPath/$item"
    $artifactURI = "https://management.azure.com/providers/Microsoft.Management/managementGroups/{0}/providers/Microsoft.Blueprint/blueprints/{1}/artifacts/{2}?api-version=2017-11-11-preview" -f $ManagementGroup, $BlueprintName, $item.name.Split('.')[0]
    Invoke-RestMethod -Method PUT -Uri $artifactURI -Headers $Headers -Body $body -ContentType "application/json"
