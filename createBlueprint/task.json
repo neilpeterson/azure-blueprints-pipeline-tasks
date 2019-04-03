@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 0,
-		"Patch": 8
+		"Patch": 0
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -24,57 +24,72 @@
 			"label": "Azure Subscription",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Select the Azure Resource Manager subscription"
+			"helpMarkDown": "Azure Resource Manager subscription."
 		},
 		{
-			"name": "BPName",
+			"name": "BlueprintName",
 			"type": "string",
 			"label": "Blueprint Name",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Enter the Blueprint name."
+			"helpMarkDown": "Blueprint name."
 		},
 		{
-			"name": "scope",
+			"name": "BlueprintCreationLocation",
 			"type": "radio",
 			"label": "Definition Location",
-			"defaultValue": "",
+			"defaultValue": "subscription",
 			"required": true,
 			"options": {
-				"managementGroup": "Management Group",
-				"subscription": "Subscription"
+				"subscription": "Subscription",
+				"managementGroup": "Management Group"
 			},
-			"helpMarkDown": "Select the scope at which the blueprint will be created. Learn more at aka.ms/BlueLocation"
+			"helpMarkDown": "Blueprint creation location. Learn more at aka.ms/BlueLocation."
 		},
 		{
-			"name": "MGName",
+			"name": "ManagementGroupName",
 			"type": "string",
-			"label:": "Choose from Management Group",
+			"label": "Management Group Name",
 			"defaultValue": "",
 			"required": false,
-			"visibleRule": "scope = managementGroup",
-			"helpMarkDown": "Management group where the blueprint definition is saved"
+			"helpMarkDown": "Management group where the blueprint definition is created.",
+			"visibleRule": "BlueprintCreationLocation = managementGroup"
 		},
 		{
-			"name": "subscriptionName",
-			"type": "pickList",
-			"label:": "Choose from Subscription",
+			"name": "BlueprintPath",
+			"type": "string",
+			"label": "Blueprint Path (JSON)",
+			"defaultValue": "",
+			"required": true,
+			"helpMarkDown": "Path to the Blueprint JSON file. Should be fully qualified path or relative to the default working directory."
+		},
+		{
+			"name": "ArtifactsPath",
+			"type": "string",
+			"label": "Artifacts Path",
 			"defaultValue": "",
 			"required": false,
-			"visibleRule": "scope = subscription",
-			"helpMarkDown": "Subscription where the blueprint definition is saved. Learn more at aka.ms/BlueLocation"
+			"helpMarkDown": "Path to the Blueprint artifact JSON files. Should be fully qualified path or relative to the default working directory."
+		},
+		{
+			"name": "PublishBlueprint",
+			"type": "boolean",
+			"label": "Publish Blueprint",
+			"defaultValue": "false",
+			"required": true,
+			"helpMarkDown": "Select to publish the Blueprint"
+		},
+		{
+			"name": "Version",
+			"type": "string",
+			"label": "Blueprint version",
+			"defaultValue": "Increment",
+			"required": false,
+			"helpMarkDown": "Blueprint version. Increment will increment the version number if the version is an integer.",
+			"visibleRule": "PublishBlueprint = true"
 		}
 	],
-	"dataSourceBindings": [{
-		"name": "ManagementGroup",
-		"target": "MGName",
-		"endpointId": "$(ConnectedServiceName)",
-		"EndpointUrl": "https://management.azure.com/providers/Microsoft.Management/managementGroups?api-version=2018-03-01-preview",
-		"resultSelector": "jsonpath:$.value[*].Name",
-		"parameters": {
-
-		}
-	}],
+	"dataSourceBindings": [],
 	"execution": {
 		"PowerShell3": {
 			"target": "$(currentDirectory)\\createBlueprint.ps1",
