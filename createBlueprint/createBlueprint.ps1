@@ -21,10 +21,12 @@ $BlueprintVersion = Get-VstsInput -Name Version
 $BlueprintLocation = Get-VstsInput -Name BlueprintCreationLocation
 $ManagementGroup = Get-VstsInput -Name ManagementGroupName
 $BlueprintName = Get-VstsInput -Name BlueprintName
+$BlueprintPath = Get-VstsInput -Name BlueprintPath
+$ArtifactsPath = Get-VstsInput -Name ArtifactsPath
 
 # Get Blueprint and Artifact paths
-$BlueprintPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $(Get-VstsInput -Name BlueprintPath)
-$ArtifactPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $(Get-VstsInput -Name ArtifactsPath)
+$BlueprintPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $BlueprintPath
+$ArtifactPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $ArtifactsPath
 
 # Get Access Token
 $Resource = "https://management.core.windows.net/"
@@ -62,7 +64,7 @@ foreach ($item in $allArtifacts) {
    Invoke-RestMethod -Method PUT -Uri $artifactURI -Headers $Headers -Body $Body -ContentType "application/json"
 }
 
-if ($PublishBlueprint) {
+if ($PublishBlueprint -eq "true") {
 
    # Set version to 1 or current + 1
    if ($BlueprintVersion -eq "Increment") {

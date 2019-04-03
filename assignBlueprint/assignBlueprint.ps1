@@ -1,5 +1,4 @@
 <#
-
 .DESCRIPTION
     Assign Azure BluePrint
 
@@ -21,9 +20,10 @@ $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey
 $BlueprintLocation = Get-VstsInput -Name BlueprintCreationLocation
 $ManagementGroup = Get-VstsInput -Name ManagementGroupName
 $BlueprintName = Get-VstsInput -Name BlueprintName
+$ParametersFilePath = Get-VstsInput -Name ParametersFile
 
-# Get Blueprint and Artifact paths
-$ParametersFilePath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $(Get-VstsInput -Name ParametersFile)
+# Get Parameters File Path
+$ParametersFilePath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $ParametersFilePath
 
 # Get Access Token
 $Resource = "https://management.core.windows.net/"
