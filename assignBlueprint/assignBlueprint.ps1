@@ -43,6 +43,8 @@ if ($BlueprintLocation -eq "managementGroup" ) {
     $body.properties.blueprintId = '/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}' -f $SubscriptionID, $BlueprintName
 }
 
+write-host $body
+
 $BPAssign = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprintAssignments/{1}?api-version=2017-11-11-preview' -f $SubscriptionID, $BlueprintName
 $body = $body  | ConvertTO-JSON -Depth 4
 Invoke-RestMethod -Method PUT -Uri $BPAssign -Headers $Headers -Body $body -ContentType "application/json"
