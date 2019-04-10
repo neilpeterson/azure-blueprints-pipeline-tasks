@@ -60,7 +60,7 @@ steps:
 | Property | Description |
 |---|---|
 | Azure Subscription | Used to authenticate with Azure. If the blueprint is created at a subscription, the subscription will also be assumed from this value. |
-| Blueprint Name**: Name for the Azure Blueprint.
+| Blueprint Name | Name for the Azure Blueprint. |
 | Definition Location | Create the Blueprint at a Subscription or a Management Group. |
 | Management Group Name | If creating at a Management Group, provide the name of the Management Group. |
 | Blueprint Path | Relative path to the Blueprint .json file. |
