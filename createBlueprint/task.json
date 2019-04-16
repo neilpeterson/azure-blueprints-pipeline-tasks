@@ -13,8 +13,8 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 0,
-		"Patch": 0
+		"Minor": 5,
+		"Patch": 5
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -24,7 +24,10 @@
 			"label": "Azure Subscription",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Azure Resource Manager subscription."
+			"helpMarkDown": "Azure Resource Manager subscription.",
+			"properties": {
+                "EndpointFilterRule": "ScopeLevel == ManagementGroup || ScopeLevel != ManagementGroup"
+            }
 		},
 		{
 			"name": "BlueprintName",
