@@ -40,13 +40,11 @@ Create a task with the following schema to create a blueprint.
 
 ```
 steps:
-- task: nepeters.azure-blueprints.CreateBlueprint.CreateBlueprint@1
+- task: nepeters.azure-blueprints.CreateBlueprint.CreateBlueprint@2
   displayName: 'Create Azure Blueprint'
   inputs:
-    azureSubscription: 'azure-management-group'
-    BlueprintName: 'blueprint-name'
-    BlueprintCreationLocation: managementGroup
-    ManagementGroupName: 'nepeters-internal'
+    azureSubscription: 'azure-management-group-byo-sp'
+    BlueprintName: 'test-001'
     BlueprintPath: './blueprints/create-blueprint/blueprint-body.json'
     ArtifactsPath: './blueprints/create-blueprint/artifacts'
     PublishBlueprint: true
@@ -58,12 +56,11 @@ Create a task with the following schema to assign a blueprint.
 
 ```
 steps:
-- task: nepeters.azure-blueprints.AssignBlueprint.AssignBlueprint@1
+- task: nepeters.azure-blueprints.AssignBlueprint.AssignBlueprint@2
   displayName: 'Assign Azure Blueprint'
   inputs:
-    azureSubscription: 'nepeters blueprints task test'
-    BlueprintName: 'demo-azd-007'
-    BlueprintCreationLocation: managementGroup
-    ManagementGroupName: 'nepeters-internal'
+    azureSubscription: 'azure-management-group-byo-sp'
+    BlueprintName: 'test-001'
     ParametersFile: './blueprints/assign-blueprint/assign-blueprint-body.json'
+    SubscriptionID: '3762d87c-0000-0000-0000-29e5e859edaf'
 ```
