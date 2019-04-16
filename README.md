@@ -22,6 +22,6 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 
 ## Log
 
-3-29-2019 v1.0.0 - Initial POC
+**3-29-2019 v1.0.0** - Initial POC
 
-4-14-2019 v1.1.0 - Removed UI for blueprint location and management group name. This is now inferred from the service connection. Updated docs with steps to create a service connection.
+**4-14-2019 v1.1.0** - Removed UI for blueprint location and management group name. This is now inferred from the service connection. Updated docs with steps to create a service connection.
