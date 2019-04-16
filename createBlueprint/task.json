@@ -13,8 +13,8 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 5,
-		"Patch": 5
+		"Minor": 1,
+		"Patch": 0
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -36,27 +36,6 @@
 			"defaultValue": "",
 			"required": true,
 			"helpMarkDown": "Blueprint name."
-		},
-		{
-			"name": "BlueprintCreationLocation",
-			"type": "radio",
-			"label": "Definition Location",
-			"defaultValue": "subscription",
-			"required": true,
-			"options": {
-				"subscription": "Subscription",
-				"managementGroup": "Management Group"
-			},
-			"helpMarkDown": "Blueprint creation location. Learn more at aka.ms/BlueLocation."
-		},
-		{
-			"name": "ManagementGroupName",
-			"type": "string",
-			"label": "Management Group Name",
-			"defaultValue": "",
-			"required": false,
-			"helpMarkDown": "Management group where the blueprint definition is created.",
-			"visibleRule": "BlueprintCreationLocation = managementGroup"
 		},
 		{
 			"name": "BlueprintPath",

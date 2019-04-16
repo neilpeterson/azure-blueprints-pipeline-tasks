@@ -10,17 +10,16 @@
 # Get Azure Service Principal
 $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
 $Endpoint = Get-VstsEndpoint -Name $ConnectedServiceName
-$SubscriptionID = $Endpoint.Data.SubscriptionId
-$SubscriptionID = $Endpoint.Data.SubscriptionId
 $TenantId = $Endpoint.Auth.Parameters.tenantid
 $ClientId = $Endpoint.Auth.Parameters.ServicePrincipalId
 $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey
 
 # Get task input
-$BlueprintLocation = Get-VstsInput -Name BlueprintCreationLocation
-$ManagementGroup = Get-VstsInput -Name ManagementGroupName
+$BlueprintLocation = $Endpoint.Data.scopeLevel
+$ManagementGroup = $Endpoint.Data.managementGroupName
 $BlueprintName = Get-VstsInput -Name BlueprintName
 $ParametersFilePath = Get-VstsInput -Name ParametersFile
+$SubscriptionID = Get-VstsInput -Name SubscriptionID
 
 # Get Parameters File Path
 $ParametersFilePath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $ParametersFilePath
@@ -37,14 +36,13 @@ $Headers.Add("Authorization","$($Token.token_type) "+ " " + "$($Token.access_tok
 $body = Get-Content -Raw -Path $ParametersFilePath | ConvertFrom-Json
 
 # Get Blueprint ID
-if ($BlueprintLocation -eq "managementGroup" ) {
+if ($BlueprintLocation -eq "ManagementGroup" ) {
     $body.properties.blueprintId = '/providers/Microsoft.Management/managementGroups/{0}/providers/Microsoft.Blueprint/blueprints/{1}' -f $ManagementGroup, $BlueprintName
 } else {
     $body.properties.blueprintId = '/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}' -f $SubscriptionID, $BlueprintName
 }
 
-write-host $body
-
+# Create Assignment
 $BPAssign = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprintAssignments/{1}?api-version=2017-11-11-preview' -f $SubscriptionID, $BlueprintName
 $body = $body  | ConvertTO-JSON -Depth 4
 Invoke-RestMethod -Method PUT -Uri $BPAssign -Headers $Headers -Body $body -ContentType "application/json"
