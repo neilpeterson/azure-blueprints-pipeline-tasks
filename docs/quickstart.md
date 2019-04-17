@@ -7,7 +7,7 @@ If your Blueprints will be created and managed at an Azure Management Group a pr
 Create a service principal using the [az ad sp create-for-rbac]() command.
 
 ```
-$ az sp create-for-rbac
+$ az ad sp create-for-rbac
 
 {
   "appId": "b9badc25-0000-0000-0000-0e015cff62dc",
