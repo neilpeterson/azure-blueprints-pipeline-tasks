@@ -4,6 +4,8 @@
 
 For configuration and capibility instructions see the [quickstart doc](./docs/quickstart.md).
 
+A sample Blueprint and task examples are avaliable [here](https://github.com/neilpeterson/blueprint-example).
+
 ## Build and deploy tasks
 
 Install the Node CLI for Azure DevOps, this requires Node.js 4.0.x.
