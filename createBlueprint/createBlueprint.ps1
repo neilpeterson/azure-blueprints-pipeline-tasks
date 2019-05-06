@@ -41,6 +41,11 @@ if ($BlueprintLocation -eq "ManagementGroup" ) {
    $BPCreateUpdate = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}?api-version=2018-11-01-preview' -f $SubscriptionID, $BlueprintName
 }
 
+Write-Debug "=========================================="
+Write-Debug "DEBUG ENDPOINT: Blueprints creation endpoint"
+Write-Debug $BPCreateUpdate
+Write-Debug "=========================================="
+
 # Create blueprints PUT
 $Headers = @{}
 $Headers.Add("Authorization","$($Token.token_type) "+ " " + "$($Token.access_token)")
@@ -60,6 +65,11 @@ foreach ($item in $allArtifacts) {
       $artifactURI = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}/artifacts/{2}?api-version=2018-11-01-preview' -f $SubscriptionID, $BlueprintName, $item.name.Split('.')[0]
    }
 
+   Write-Debug "=========================================="
+   Write-Debug "DEBUG ENDPOINT: Artifacts creation endpoint"
+   Write-Debug $artifactURI
+   Write-Debug "=========================================="
+
    # Add artifacts PUT
    Invoke-RestMethod -Method PUT -Uri $artifactURI -Headers $Headers -Body $Body -ContentType "application/json"
 }
@@ -75,6 +85,11 @@ if ($PublishBlueprint -eq "true") {
       } else {
          $Get = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}/versions?api-version=2018-11-01-preview' -f $SubscriptionID, $BlueprintName
       }
+
+      Write-Debug "=========================================="
+      Write-Debug "DEBUG ENDPOINT: Endpoint to get current Blueprint version"
+      Write-Debug $Get
+      Write-Debug "=========================================="
 
       # Get blueprint version GET
       $pubBP = Invoke-RestMethod -Method GET -Uri $Get -Headers $Headers
@@ -97,6 +112,11 @@ if ($PublishBlueprint -eq "true") {
    } else {
       $PublishBlueprint = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}/versions/{2}?api-version=2018-11-01-preview' -f $SubscriptionID, $BlueprintName, $version
    }
+
+   Write-Debug "=========================================="
+   Write-Debug "DEBUG ENDPOINT: Publish Blueprint endpoint endpoint"
+   Write-Debug $PublishBlueprint
+   Write-Debug "=========================================="
 
    # Publish blueprint PUT
    Invoke-RestMethod -Method PUT -Uri $PublishBlueprint -Headers $Headers
