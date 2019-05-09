@@ -54,12 +54,29 @@
 			"helpMarkDown": "Path to the Blueprint artifact JSON files. Should be fully qualified path or relative to the default working directory."
 		},
 		{
+			"name": "AlternateLocation",
+			"type": "boolean",
+			"label": "Alternate definition location",
+			"defaultValue": "false",
+			"required": true,
+			"helpMarkDown": "By default Blueprints are created at the Management Group or subscription associated with the Azure Pipeliens service conncetion. Select this option to provide an alternate location (subscription)."
+		},
+		{
+			"name": "AlternateSubscription",
+			"type": "string",
+			"label": "Subscription",
+			"defaultValue": "Increment",
+			"required": false,
+			"helpMarkDown": "Subscription at which the Blueprint is created.",
+			"visibleRule": "AlternateLocation = true"
+		},
+		{
 			"name": "PublishBlueprint",
 			"type": "boolean",
 			"label": "Publish Blueprint",
 			"defaultValue": "false",
 			"required": true,
-			"helpMarkDown": "Select to publish the Blueprint"
+			"helpMarkDown": "Select to publish the Blueprint."
 		},
 		{
 			"name": "Version",
