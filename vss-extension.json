@@ -1,8 +1,8 @@
 {
 	"manifestVersion": 1,
 	"id": "azure-blueprints",
-	"version": "1.1.4",
-	"name": "Azure Blueprints Dev",
+	"version": "1.1.5",
+	"name": "Azure Blueprints",
 	"description": "A VSTS Build Task that creates and assigns Azure Blueprints.",
 	"publisher": "nepeters",
 	"categories": [
