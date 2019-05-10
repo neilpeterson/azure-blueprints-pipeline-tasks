@@ -10,17 +10,33 @@
  # Helper functions
  Import-Module ./blueprints.psm1
 
-# Get Azure Service Principal
+# Get authentication details
 $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName -Require
 $Endpoint = Get-VstsEndpoint -Name $ConnectedServiceName -Require
-$SubscriptionID = $Endpoint.Data.SubscriptionId
 $TenantId = $Endpoint.Auth.Parameters.tenantid
 $ClientId = $Endpoint.Auth.Parameters.ServicePrincipalId
 $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey
 
-# Get task input
-$BlueprintLocation = $Endpoint.Data.scopeLevel
-$ManagementGroup = $Endpoint.Data.managementGroupName
+# Get blueprint location (Management Group or Subscription).
+$BlueprintCreationScope = $Endpoint.Data.scopeLevel
+$BlueprintManagementGroup = $Endpoint.Data.managementGroupName
+$BlueprintSubscription = Get-VstsInput -Name AlternateLocation
+
+write-host "============"
+write-host $BlueprintSubscription
+write-host "============"
+
+if ($BlueprintSubscription -eq "true") {
+   write-host "============="
+   write-host "11111"
+   write-host "============="
+   $SubscriptionID = Get-VstsInput -Name AlternateSubscription
+   $BlueprintCreationScope = "Subscription"
+} else {
+   $SubscriptionID = $Endpoint.Data.SubscriptionId
+}
+
+# Get blueprint details
 $BlueprintName = Get-VstsInput -Name BlueprintName
 $BlueprintPath = Get-VstsInput -Name BlueprintPath
 $ArtifactsPath = Get-VstsInput -Name ArtifactsPath
@@ -43,16 +59,16 @@ $Headers.Add("Authorization","$($Token.token_type) "+ " " + "$($Token.access_tok
 
 # Create / Update Blueprint
 $Body = Get-Content -Raw -Path $BlueprintPath
-$BlueprintURI = Get-BlueprintURI -Scope $BlueprintLocation -ManagementGroup $ManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName
+$BlueprintURI = Get-BlueprintURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName
 Invoke-RestMethod -Method PUT -Uri $BlueprintURI -Headers $Headers -Body $Body -ContentType "application/json"
 
 # Remove exsisting artifacts
-$ArtifactsURI = Get-AllArtifactsURI -Scope $BlueprintLocation -ManagementGroup $ManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName
+$ArtifactsURI = Get-AllArtifactsURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName
 $artifacts = Invoke-RestMethod -Method GET -Uri $ArtifactsURI -Headers $Headers
 
 if ($artifacts.value.count -gt 0) {
    foreach ($artifact in $artifacts) {
-      $ArtifactDeleteURI = Get-ArtifactURI -Scope $BlueprintLocation -ManagementGroup $ManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName -ArtifactName $artifact.value.name
+      $ArtifactDeleteURI = Get-ArtifactURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName -ArtifactName $artifact.value.name
       Invoke-RestMethod -Method DELETE -Uri $ArtifactDeleteURI -Headers $Headers
   }
 }
@@ -63,7 +79,7 @@ if (Test-Path $ArtifactPath) {
    if ($allArtifacts.count -gt 0) {
       foreach ($item in $allArtifacts) {
          $Body = Get-Content -Raw -Path $item.FullName
-         $ArtifactCreateURI = Get-ArtifactURI -Scope $BlueprintLocation -ManagementGroup $ManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName -ArtifactName $item.name.Split('.')[0]
+         $ArtifactCreateURI = Get-ArtifactURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName -ArtifactName $item.name.Split('.')[0]
          Invoke-RestMethod -Method PUT -Uri $ArtifactCreateURI -Headers $Headers -Body $Body -ContentType "application/json"
       }
    }
@@ -74,7 +90,7 @@ if ($PublishBlueprint -eq "true") {
 
     # Get current blueprint version or use pipeline string
    if ($BlueprintVersion -eq "Increment") {
-      $BlueprintVersionURI = Get-BlueprintVersionsURI -Scope $BlueprintLocation -ManagementGroup $ManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName
+      $BlueprintVersionURI = Get-BlueprintVersionsURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName    
       $pubBP = Invoke-RestMethod -Method GET -Uri $BlueprintVersionURI -Headers $Headers
 
       if (!$pubBP.value[$pubBP.value.Count - 1].name) {
@@ -88,6 +104,6 @@ if ($PublishBlueprint -eq "true") {
    }
 
    # Publish blueprint
-   $PublishBlueprintURI = Get-PublishBlueprintURI -Scope $BlueprintLocation -ManagementGroup $ManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName -BlueprintVersion $version
+   $PublishBlueprintURI = Get-PublishBlueprintURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName -BlueprintVersion $version
    Invoke-RestMethod -Method PUT -Uri $PublishBlueprintURI -Headers $Headers
 }

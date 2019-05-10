@@ -163,7 +163,7 @@ function Get-PublishBlueprintURI {
         [void]$sb.Append("/versions/")
         [void]$sb.Append($BlueprintVersion)
         [void]$sb.Append($APIVersion)
-        [void]$sb.replace('{0}',$ManagementGroup)
+        [void]$sb.replace('{0}',$SubscriptionID)
         [void]$sb.replace('{1}',$BlueprintName)
 
         return $sb.ToString()

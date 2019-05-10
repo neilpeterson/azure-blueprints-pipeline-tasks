@@ -13,18 +13,18 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 1,
-		"Patch": 6
+		"Minor": 3,
+		"Patch": 1
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
 			"name": "ConnectedServiceName",
 			"aliases": ["azureSubscription"],
 			"type": "connectedService:AzureRM",
-			"label": "Azure Subscription",
+			"label": "Azure Service Connection",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Azure Resource Manager subscription.",
+			"helpMarkDown": "Azure service connection for the Blueprints task. This can be an Azure Management Group or Subscription. By default, this is the location at which the Blueprint is created. If selecting a Management Group, an alternate creation subscription can be specified.",
 			"properties": {
                 "EndpointFilterRule": "ScopeLevel == ManagementGroup || ScopeLevel != ManagementGroup"
             }
@@ -43,7 +43,7 @@
 			"label": "Blueprint Path (JSON)",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Path to the Blueprint JSON file. Should be fully qualified path or relative to the default working directory."
+			"helpMarkDown": "Path to the Blueprint JSON file. Should be the fully qualified path or relative to the default working directory.."
 		},
 		{
 			"name": "ArtifactsPath",
@@ -51,7 +51,7 @@
 			"label": "Artifacts Path",
 			"defaultValue": "",
 			"required": false,
-			"helpMarkDown": "Path to the Blueprint artifact JSON files. Should be fully qualified path or relative to the default working directory."
+			"helpMarkDown": "Path to the Blueprint artifact JSON files. Should be the fully qualified path or relative to the default working directory."
 		},
 		{
 			"name": "AlternateLocation",
@@ -59,13 +59,12 @@
 			"label": "Alternate definition location",
 			"defaultValue": "false",
 			"required": true,
-			"helpMarkDown": "By default Blueprints are created at the Management Group or subscription associated with the Azure Pipeliens service conncetion. Select this option to provide an alternate location (subscription)."
+			"helpMarkDown": "By default, Blueprints are created at the Management Group or subscription associated with the Azure Pipeline service connection. Select this option to provide an alternate subscription."
 		},
 		{
 			"name": "AlternateSubscription",
 			"type": "string",
-			"label": "Subscription",
-			"defaultValue": "Increment",
+			"label": "Subscription Id",
 			"required": false,
 			"helpMarkDown": "Subscription at which the Blueprint is created.",
 			"visibleRule": "AlternateLocation = true"
@@ -84,7 +83,7 @@
 			"label": "Blueprint version",
 			"defaultValue": "Increment",
 			"required": false,
-			"helpMarkDown": "Blueprint version. Increment will increment the version number if the version is an integer.",
+			"helpMarkDown": "Blueprint version. A value of 'Increment' will increment the version number if the version is an integer.",
 			"visibleRule": "PublishBlueprint = true"
 		}
 	],
