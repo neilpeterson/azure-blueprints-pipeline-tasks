@@ -28,8 +28,10 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 
 **4-14-2019 v1.1.0** - Removed UI for blueprint location and management group name. This is now inferred from the service connection. Updated docs with steps to create a service connection.
 
-**5-17-2019 v1.1.3** - Added logic to remove / reestablish artifacts from code. Also updated API version across all methods.
+**5-08-2019 v1.1.3** - Added logic to remove / reestablish artifacts from code. Also updated API version across all methods.
 
-**5-17-2019 v1.1.4** - Refactored REST URI creation to use string builder and a helper function.
+**5-08-2019 v1.1.4** - Refactored REST URI creation to use string builder and a helper function.
 
-**5-17-2019 v1.1.5** - Renamed extension.
+**5-08-2019 v1.1.5** - Renamed extension.
+
+**5-10-2019 v1.1.6** - Added logic to create Blueprint at specified subscription.
