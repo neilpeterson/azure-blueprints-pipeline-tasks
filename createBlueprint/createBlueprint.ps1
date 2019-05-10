@@ -22,14 +22,7 @@ $BlueprintCreationScope = $Endpoint.Data.scopeLevel
 $BlueprintManagementGroup = $Endpoint.Data.managementGroupName
 $BlueprintSubscription = Get-VstsInput -Name AlternateLocation
 
-write-host "============"
-write-host $BlueprintSubscription
-write-host "============"
-
 if ($BlueprintSubscription -eq "true") {
-   write-host "============="
-   write-host "11111"
-   write-host "============="
    $SubscriptionID = Get-VstsInput -Name AlternateSubscription
    $BlueprintCreationScope = "Subscription"
 } else {
@@ -90,7 +83,7 @@ if ($PublishBlueprint -eq "true") {
 
     # Get current blueprint version or use pipeline string
    if ($BlueprintVersion -eq "Increment") {
-      $BlueprintVersionURI = Get-BlueprintVersionsURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName    
+      $BlueprintVersionURI = Get-BlueprintVersionsURI -Scope $BlueprintCreationScope -ManagementGroup $BlueprintManagementGroup -SubscriptionID $SubscriptionID -BlueprintName $BlueprintName
       $pubBP = Invoke-RestMethod -Method GET -Uri $BlueprintVersionURI -Headers $Headers
 
       if (!$pubBP.value[$pubBP.value.Count - 1].name) {
@@ -98,8 +91,7 @@ if ($PublishBlueprint -eq "true") {
       } else {
          $version = ([int]$pubBP.value[$pubBP.value.Count - 1].name) + 1
       }
-   }
-   else {
+   } else {
       $version = $BlueprintVersion
    }
 
