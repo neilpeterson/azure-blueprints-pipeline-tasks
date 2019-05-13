@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 1,
-		"Patch": 6
+		"Patch": 7
 	},
 	"instanceNameFormat": "Assign Azure Blueprint",
 	"inputs": [{
@@ -52,14 +52,6 @@
 			"defaultValue": "",
 			"required": false,
 			"helpMarkDown": "Subscription ID for assignment."
-		},
-		{
-			"name": "AlternateLocation",
-			"type": "boolean",
-			"label": "The Blueprint is also stored at this subscription.",
-			"defaultValue": "false",
-			"required": true,
-			"helpMarkDown": "Indicates that the Blueprint is stored at the provided subscription and not the parent management group."
 		}
 	],
 	"execution": {

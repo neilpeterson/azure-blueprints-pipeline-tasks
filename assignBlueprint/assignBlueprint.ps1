@@ -7,6 +7,9 @@
     Intent: Sample to demonstrate Azure BluePrints with Azure DevOps
 #>
 
+# Helper functions
+Import-Module ./helperFunctions.psm1
+
 # Get authentication details
 $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
 $Endpoint = Get-VstsEndpoint -Name $ConnectedServiceName
@@ -14,20 +17,14 @@ $TenantId = $Endpoint.Auth.Parameters.tenantid
 $ClientId = $Endpoint.Auth.Parameters.ServicePrincipalId
 $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey
 
-# Get blueprint location (Management Group or Subscription).
-$BlueprintManagementGroup = $Endpoint.Data.managementGroupName
-$AlternateLocation = Get-VstsInput -Name AlternateLocation
+# Get Service connection details
+$BlueprintManagementGroup = $Endpoint.Data.managementGroupId
+$SubscriptionID = $Endpoint.Data.SubscriptionId
 
-if ($AlternateLocation -eq "true") {
-    $BlueprintCreationScope = "Subscription"
- } else {
-    $BlueprintCreationScope = $Endpoint.Data.scopeLevel
- }
-
-# Get blueprint details
+# Get Blueprint details
 $BlueprintName = Get-VstsInput -Name BlueprintName
 $ParametersFilePath = Get-VstsInput -Name ParametersFile
-$SubscriptionID = Get-VstsInput -Name SubscriptionID
+$TargetSubscriptionID = Get-VstsInput -Name SubscriptionID
 
 # Get Parameters File Path
 $ParametersFilePath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $ParametersFilePath
@@ -43,14 +40,32 @@ $Headers = @{}
 $Headers.Add("Authorization","$($Token.token_type) "+ " " + "$($Token.access_token)")
 $body = Get-Content -Raw -Path $ParametersFilePath | ConvertFrom-Json
 
-# Get Blueprint ID
-if ($BlueprintCreationScope -eq "ManagementGroup" ) {
-    $body.properties.blueprintId = '/providers/Microsoft.Management/managementGroups/{0}/providers/Microsoft.Blueprint/blueprints/{1}' -f $BlueprintManagementGroup, $BlueprintName
-} else {
-    $body.properties.blueprintId = '/subscriptions/{0}/providers/Microsoft.Blueprint/blueprints/{1}' -f $SubscriptionID, $BlueprintName
+# If scoped to Management Group, try and find Blueprint (ID).
+if ($BlueprintManagementGroup) {
+    $BlueprintURIManagementGroup = Get-BlueprintURI -Scope "ManagementGroup" -ManagementGroup $BlueprintManagementGroup -BlueprintName $BlueprintName
+    try {
+        $BlueprintID = Invoke-RestMethod -Method GET -Uri $BlueprintURIManagementGroup -Headers $Headers -ContentType "application/json"
+    } catch {
+        Write-Host "Blueprint not found at Managemnt Group, trying Subscription"
+    }
 }
 
+# Check Subscription for the Blueprint (ID). If found at both MG and Subscription, use Subscription.
+$BlueprintURISubscription = Get-BlueprintURI -Scope "Subscription" -SubscriptionID $TargetSubscriptionID -BlueprintName $BlueprintName
+
+try {
+    $BlueprintID = Invoke-RestMethod -Method GET -Uri $BlueprintURISubscription -Headers $Headers -ContentType "application/json"
+} catch {
+    if (!$BlueprintID) {
+        Write-Host "Blueprint not found at subscription"
+        Exit
+    }
+}
+
+# Update Assignment body with Blueprint ID
+$body.properties.blueprintId = $BlueprintID.id
+
 # Create Assignment
-$BPAssign = 'https://management.azure.com/subscriptions/{0}/providers/Microsoft.Blueprint/blueprintAssignments/{1}?api-version=2018-11-01-preview' -f $SubscriptionID, $BlueprintName
+$BPAssign = Get-BlueprintAssignmentURI  -SubscriptionID $TargetSubscriptionID -BlueprintName $BlueprintName
 $body = $body  | ConvertTO-JSON -Depth 4
 Invoke-RestMethod -Method PUT -Uri $BPAssign -Headers $Headers -Body $body -ContentType "application/json"
