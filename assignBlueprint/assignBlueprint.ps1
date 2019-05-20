@@ -21,10 +21,12 @@ $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey
 $BlueprintManagementGroup = $Endpoint.Data.managementGroupId
 $SubscriptionID = $Endpoint.Data.SubscriptionId
 
-# Get Blueprint details
+# Get Blueprint Assignment details
 $BlueprintName = Get-VstsInput -Name BlueprintName
 $ParametersFilePath = Get-VstsInput -Name ParametersFile
 $TargetSubscriptionID = Get-VstsInput -Name SubscriptionID
+$Wait = Get-VstsInput -Name Wait
+$Timeout = Get-VstsInput -Name Timeout
 
 # Get Parameters File Path
 $ParametersFilePath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $ParametersFilePath
@@ -66,6 +68,36 @@ try {
 $body.properties.blueprintId = $BlueprintID.id
 
 # Create Assignment
-$BPAssign = Get-BlueprintAssignmentURI  -SubscriptionID $TargetSubscriptionID -BlueprintName $BlueprintName
+$BPAssign = Get-BlueprintAssignmentURI -SubscriptionID $TargetSubscriptionID -BlueprintName $BlueprintName
 $body = $body  | ConvertTO-JSON -Depth 4
 Invoke-RestMethod -Method PUT -Uri $BPAssign -Headers $Headers -Body $body -ContentType "application/json"
+
+# Wait for Assignment
+if ($Wait -eq "true") {
+
+    # Timeout logic
+    $timeout = new-timespan -Seconds $Timeout
+    $sw = [diagnostics.stopwatch]::StartNew()
+
+    while ($sw.elapsed -lt $timeout){
+
+        # Get Assignment Operation ID
+        $AssignmentOperations = Get-BlueprintAssignmentOperationURI -SubscriptionID $TargetSubscriptionID -BlueprintName $BlueprintName
+        $Assignment = Invoke-RestMethod -Method GET -Uri $AssignmentOperations -Headers $Headers -ContentType "application/json"
+
+        # Get Assignment Status
+        $AssignmentStatus = Get-BlueprintAssignmentStatusURI -SubscriptionID $TargetSubscriptionID -BlueprintName $BlueprintName -AssignmentOperationID $Assignment.value[0].name
+
+        Do {
+            $Status = Invoke-RestMethod -Method GET -Uri $AssignmentStatus -Headers $Headers -ContentType "application/json"
+
+            if ($Status.properties.assignmentState -eq "failed") {
+                Write-Error $Status.properties.deployments.result.error.message
+                break
+            }
+
+            Sleep 5
+
+        } while ($Status.properties.assignmentState -ne "succeeded")
+    }
+}

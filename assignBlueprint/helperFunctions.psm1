@@ -49,3 +49,43 @@ function Get-BlueprintAssignmentURI  {
 
     return $sb.ToString()
 }
+
+function Get-BlueprintAssignmentOperationURI {
+
+    param (
+        [string]$SubscriptionID,
+        [string]$BlueprintName
+    )
+
+    $sb = [System.Text.StringBuilder]::new()
+
+    [void]$sb.Append($AssignmentBaseURI)
+    [void]$sb.Append('/assignmentOperations')
+    [void]$sb.Append($APIVersion)
+    [void]$sb.replace('{0}',$SubscriptionID)
+    [void]$sb.replace('{1}',$BlueprintName)
+
+    return $sb.ToString()
+
+}
+
+function Get-BlueprintAssignmentStatusURI {
+
+    param (
+        [string]$SubscriptionID,
+        [string]$BlueprintName,
+        [string]$AssignmentOperationID
+    )
+
+    $sb = [System.Text.StringBuilder]::new()
+
+    [void]$sb.Append($AssignmentBaseURI)
+    [void]$sb.Append('/assignmentOperations/')
+    [void]$sb.Append($AssignmentOperationID)
+    [void]$sb.Append($APIVersion)
+    [void]$sb.replace('{0}',$SubscriptionID)
+    [void]$sb.replace('{1}',$BlueprintName)
+
+    return $sb.ToString()
+
+}
