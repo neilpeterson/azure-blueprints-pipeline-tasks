@@ -26,7 +26,7 @@ Using the following example, replace `management-group-name` with the name of yo
 az role assignment create --role owner --assignee b9badc25-0000-0000-0000-0e015cff62dc --scope https://management.azure.com/providers/Microsoft.Management/managementGroups/management-group-name
 ```
 
-## Create Azure DevOps Serive Connection
+## Create Azure DevOps Service Connection
 
 Create an Azure DevOps project and then a new service connection with the type `Azure Resource Manager`. If your Blueprints will be created and managed at a Management Group, select `ManagementGroup` for the scope level, select `use the full version of the service connection dialog`, and fill out the form with the credentials created in the last step.
 
