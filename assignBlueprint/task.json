@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 2,
-		"Patch": 0
+		"Patch": 1
 	},
 	"instanceNameFormat": "Assign Azure Blueprint",
 	"inputs": [{
@@ -24,10 +24,18 @@
 			"label": "Azure Service Connection",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Azure service connection for the Blueprints task. This can be an Azure Management Group or Subscription. By default, this is the location at which the Blueprint is stored. If selecting a Management Group, an alternate subscription location can be specified for the Blueprint.",
+			"helpMarkDown": "Azure service connection for the Blueprints task. This can be an Azure Management Group or Subscription.",
 			"properties": {
                 "EndpointFilterRule": "ScopeLevel == ManagementGroup || ScopeLevel != ManagementGroup"
             }
+		},
+		{
+			"name": "AssignmentName",
+			"type": "string",
+			"label": "Assignment Name",
+			"defaultValue": "",
+			"required": true,
+			"helpMarkDown": "Assignment name."
 		},
 		{
 			"name": "BlueprintName",
@@ -38,12 +46,20 @@
 			"helpMarkDown": "Blueprint name."
 		},
 		{
-			"name": "ParametersFile",
+			"name": "BlueprintVersion",
 			"type": "string",
-			"label": "Parameters File Path",
+			"label": "Blueprint Version",
+			"defaultValue": "Latest",
+			"required": false,
+			"helpMarkDown": "Blueprint version. If this value is equal to latest, the latest published version will be used."
+		},
+		{
+			"name": "ParametersFile",
+			"type": "filePath",
+			"label": "Assignment File Path",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Should be fully qualified path or relative to the default working directory."
+			"helpMarkDown": "A JSON file containing the assignment details and parameter values."
 		},
 		{
 			"name": "SubscriptionID",

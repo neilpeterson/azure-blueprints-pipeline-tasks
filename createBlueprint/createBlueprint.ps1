@@ -3,7 +3,6 @@
    Creates Azure BluePrint
 
 .NOTES
-   Author: Neil Peterson
    Intent: Sample to demonstrate Azure BluePrints with Azure DevOps
 #>
 
@@ -14,7 +13,7 @@ $TenantId = $Endpoint.Auth.Parameters.tenantid
 $ClientId = $Endpoint.Auth.Parameters.ServicePrincipalId
 $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey | ConvertTo-SecureString -AsPlainText -Force
 
-# Get service connection scope (Management Group or Subscription).
+# Get service connection scope (Management Group or Subscription)
 $ServiceConnectionScope = $Endpoint.Data.scopeLevel
 $BlueprintManagementGroup = $Endpoint.Data.managementGroupId
 $BlueprintSubscriptionID = $Endpoint.Data.subscriptionId
@@ -24,7 +23,6 @@ $BlueprintAltSubscriptionID = Get-VstsInput -Name AlternateSubscription
 # Get blueprint details
 $BlueprintName = Get-VstsInput -Name BlueprintName
 $BlueprintPath = Get-VstsInput -Name BlueprintPath
-$BlueprintPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY + $BlueprintPath
 $PublishBlueprint = Get-VstsInput -Name PublishBlueprint
 $BlueprintVersion = Get-VstsInput -Name Version
 
@@ -54,15 +52,15 @@ Invoke-Expression "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPat
 
 # Publish blueprint if publish
 if ($PublishBlueprint -eq "true") {
+   $BlueprintObject = Invoke-Expression "Get-AzBlueprint -Name $BlueprintName $BlueprintScope"
 
    # Set version if increment
    if ($BlueprintVersion -eq "Increment") {
-      $BlueprintObject = Invoke-Expression "Get-AzBlueprint -Name $BlueprintName $BlueprintScope"
-         if ($BlueprintObject.versions[$BlueprintObject.versions.count - 1] -eq 0) {
-            $BlueprintVersion = 1
-         } else {
-            $BlueprintVersion = ([int]$BlueprintObject.versions[$BlueprintObject.versions.count - 1]) + 1
-         }
+      if ($BlueprintObject.versions[$BlueprintObject.versions.count - 1] -eq 0) {
+         $BlueprintVersion = 1
+      } else {
+         $BlueprintVersion = ([int]$BlueprintObject.versions[$BlueprintObject.versions.count - 1]) + 1
+      }
    }
 
    # Publish blueprint

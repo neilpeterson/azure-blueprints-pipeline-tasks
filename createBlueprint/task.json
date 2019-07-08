@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 2,
-		"Patch": 0
+		"Patch": 1
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -39,11 +39,11 @@
 		},
 		{
 			"name": "BlueprintPath",
-			"type": "string",
-			"label": "Blueprint Path (JSON)",
+			"type": "filePath",
+			"label": "Blueprint Directory",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Path to the Blueprint JSON file. Should be the fully qualified path or relative to the default working directory.."
+			"helpMarkDown": "Path to a directory with a blueprint.json file and a directory named artifacts."
 		},
 		{
 			"name": "AlternateLocation",
