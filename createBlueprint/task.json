@@ -13,8 +13,8 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 1,
-		"Patch": 7
+		"Minor": 2,
+		"Patch": 1
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -39,19 +39,11 @@
 		},
 		{
 			"name": "BlueprintPath",
-			"type": "string",
-			"label": "Blueprint Path (JSON)",
+			"type": "filePath",
+			"label": "Blueprint Directory",
 			"defaultValue": "",
 			"required": true,
-			"helpMarkDown": "Path to the Blueprint JSON file. Should be the fully qualified path or relative to the default working directory.."
-		},
-		{
-			"name": "ArtifactsPath",
-			"type": "string",
-			"label": "Artifacts Path",
-			"defaultValue": "",
-			"required": false,
-			"helpMarkDown": "Path to the Blueprint artifact JSON files. Should be the fully qualified path or relative to the default working directory."
+			"helpMarkDown": "Path to a directory with a blueprint.json file and a directory named artifacts."
 		},
 		{
 			"name": "AlternateLocation",

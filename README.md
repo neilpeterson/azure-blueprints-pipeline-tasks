@@ -37,3 +37,5 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 **5-10-2019 v1.1.6** - Added logic to create Blueprint at specified subscription.
 
 **5-13-2019 v1.1.7** - Added logic to create and assign from an alternate location (non-service connection scoped subscription.) Update Management Group logic to use the ID instead of the name.
+
+**7-07-2019 v1.2.1** - Extension converted to use Az.Blueprints PowerShell module which fixes [Issue 24](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/24) and [Issue 23](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/23) . Adds version-specific assignment to fix [Issue 25](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/25). Adds a wait on assignment to fix [Issue 14](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/14).
