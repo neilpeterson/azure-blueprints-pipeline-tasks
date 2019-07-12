@@ -1,13 +1,22 @@
 {
 	"manifestVersion": 1,
 	"id": "azure-blueprints",
-	"version": "1.2.1",
+	"version": "1.2.7",
 	"name": "Azure Blueprints",
 	"description": "A VSTS Build Task that creates and assigns Azure Blueprints.",
 	"publisher": "nepeters",
 	"categories": [
 		"Azure Pipelines"
 	],
+    "content": {
+        "details": {
+            "path": "docs/overview.md"
+        }
+    },
+	"public": true,
+	"galleryFlags": [
+        "Preview"
+    ],
 	"targets": [{
 		"id": "Microsoft.VisualStudio.Services"
 	}],
