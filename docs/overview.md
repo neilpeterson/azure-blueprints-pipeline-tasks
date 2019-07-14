@@ -1,6 +1,6 @@
 # Quickstart: Azure Blueprints tasks for Azure Pipelines
 
-Before using the Azure Blueprint tasks for Azure Pipelines, you need a Blueprint definition and all artifacts ready to go. For more information on creating Azure Blueprints, see the [Azure Blueprints documentation]().
+Before using the Azure Blueprint tasks for Azure Pipelines, you need a Blueprint definition and all artifacts ready to go. For more information on creating Azure Blueprints, see the [Azure Blueprints documentation](https://docs.microsoft.com/en-us/azure/governance/blueprints/?WT.mc_id=blueprintsextension-github-nepeters).
 
 ## Create Blueprint Task
 
