@@ -2,7 +2,7 @@
 
 **Current Status**: Proof of concept / iterating on UX. The intention for this project is to refactor into Typescript once capability and functionality feels right.
 
-For configuration and capibility instructions see the [quickstart doc](./docs/quickstart.md).
+For configuration and capibility instructions see the [quickstart doc](./docs/overview.md).
 
 A sample Blueprint and task examples are available [here](https://github.com/neilpeterson/blueprint-example).
 
@@ -39,3 +39,5 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 **5-13-2019 v1.1.7** - Added logic to create and assign from an alternate location (non-service connection scoped subscription.) Update Management Group logic to use the ID instead of the name.
 
 **7-07-2019 v1.2.1** - Extension converted to use Az.Blueprints PowerShell module which fixes [Issue 24](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/24) and [Issue 23](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/23) . Adds version-specific assignment to fix [Issue 25](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/25). Adds a wait on assignment to fix [Issue 14](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/14).
+
+**7-11-2019 v1.2.7** - Metadata and docs for marketplace publishing.
