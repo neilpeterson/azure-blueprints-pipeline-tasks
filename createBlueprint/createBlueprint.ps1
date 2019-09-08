@@ -43,14 +43,23 @@ if ($ServiceConnectionScope -eq 'Subscription') {
    $BlueprintScope = "-SubscriptionId $BlueprintSubscriptionID"
 }
 
+# Verbose output
+write-output "**Output from Extension**"
+write-output "Blueprint Name: $BlueprintName"
+write-output "Blueprint Path: $BlueprintPath"
+write-output "Blueprint Scope: $BlueprintScope"
+write-output "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath $BlueprintPath $BlueprintScope -Force"
+
 # Connect to Azure
 $Creds = New-Object System.Management.Automation.PSCredential ($ClientId, $ClientSecret)
 Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -WarningAction silentlyContinue
 
 # Create Blueprint
+write-output "Creating Blueprint"
 Invoke-Expression "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath $BlueprintPath $BlueprintScope -Force"
 
 # Publish blueprint if publish
+write-output "Publishing Blueprint"
 if ($PublishBlueprint -eq "true") {
    $BlueprintObject = Invoke-Expression "Get-AzBlueprint -Name $BlueprintName $BlueprintScope"
 
