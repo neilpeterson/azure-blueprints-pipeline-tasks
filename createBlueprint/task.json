@@ -1,7 +1,7 @@
 {
 	"id": "1a8623d7-1d5c-423c-9d92-5e9587bbb02a",
-	"name": "DevCreateBlueprint",
-	"friendlyName": "Dev Create Azure Blueprint",
+	"name": "CreateBlueprint",
+	"friendlyName": "Create Azure Blueprint",
 	"description": "Creates an Azure Blueprint",
 	"helpMarkDown": "",
 	"category": "Build",
@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 4,
-		"Patch": 0
+		"Patch": 1
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
