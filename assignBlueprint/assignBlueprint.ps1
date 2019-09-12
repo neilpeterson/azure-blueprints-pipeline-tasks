@@ -57,7 +57,12 @@ $body.properties.blueprintId = $BluePrintObject.id
 $body | ConvertTo-Json -Depth 4 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
 
 # Create Blueprint assignment
-New-AzBlueprintAssignment -Name $AssignmentName -Blueprint $BluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
+try {
+    Get-AzBlueprintAssignment -Name $AssignmentName | Out-Null
+    Set-AzBlueprintAssignment -Name $AssignmentName -Blueprint $bluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
+} catch {
+    New-AzBlueprintAssignment -Name $AssignmentName -Blueprint $bluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
+}
 
 # Wait for assignment to complete
 if ($Wait -eq "true") {
