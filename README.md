@@ -41,3 +41,5 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 **7-07-2019 v1.2.1** - Extension converted to use Az.Blueprints PowerShell module which fixes [Issue 24](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/24) and [Issue 23](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/23) . Adds version-specific assignment to fix [Issue 25](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/25). Adds a wait on assignment to fix [Issue 14](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/14).
 
 **7-11-2019 v1.2.7** - Metadata and docs for marketplace publishing.
+
+**9-11-2019 v1.4.0** - Added Set-AzBlueprintAssignment for idempotency which fixes [Issue 30](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/30).
