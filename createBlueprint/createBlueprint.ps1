@@ -12,6 +12,7 @@ $Endpoint = Get-VstsEndpoint -Name $ConnectedServiceName -Require
 $TenantId = $Endpoint.Auth.Parameters.tenantid
 $ClientId = $Endpoint.Auth.Parameters.ServicePrincipalId
 $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey | ConvertTo-SecureString -AsPlainText -Force
+$Environment = $Endpoint.Data.Environment
 
 # Get service connection scope (Management Group or Subscription)
 $ServiceConnectionScope = $Endpoint.Data.scopeLevel
@@ -52,7 +53,7 @@ write-output "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath $Bl
 
 # Connect to Azure
 $Creds = New-Object System.Management.Automation.PSCredential ($ClientId, $ClientSecret)
-Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -WarningAction silentlyContinue
+Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -Environment $Environment -WarningAction silentlyContinue
 
 # Create Blueprint
 write-output "Creating Blueprint"
