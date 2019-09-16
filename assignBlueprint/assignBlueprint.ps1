@@ -54,7 +54,7 @@ if ($BlueprintVersion -eq 'latest') {
 # Add Blueprint ID
 $body = Get-Content -Raw -Path $AssignmentFilePath | ConvertFrom-Json
 $body.properties.blueprintId = $BluePrintObject.id
-$body | ConvertTo-Json -Depth 4 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
+$body | ConvertTo-Json -Depth 5 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
 
 # Create Blueprint assignment
 try {
