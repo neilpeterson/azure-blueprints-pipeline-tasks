@@ -12,6 +12,7 @@ $Endpoint = Get-VstsEndpoint -Name $ConnectedServiceName
 $TenantId = $Endpoint.Auth.Parameters.tenantid
 $ClientId = $Endpoint.Auth.Parameters.ServicePrincipalId
 $ClientSecret = $Endpoint.Auth.Parameters.ServicePrincipalKey | ConvertTo-SecureString -AsPlainText -Force
+$Environment = $Endpoint.Data.Environment
 
 # Get service connection scope (Management Group or Subscription)
 $ServiceConnectionScope = $Endpoint.Data.scopeLevel
@@ -42,7 +43,7 @@ if ($ServiceConnectionScope -eq 'Subscription') {
 
 # Connect to Azure
 $Creds = New-Object System.Management.Automation.PSCredential ($ClientId, $ClientSecret)
-Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -WarningAction silentlyContinue
+Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -Environment $Environment -WarningAction silentlyContinue
 
 # Get Blueprint object
 if ($BlueprintVersion -eq 'latest') {
