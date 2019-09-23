@@ -28,8 +28,19 @@ $PublishBlueprint = Get-VstsInput -Name PublishBlueprint
 $BlueprintVersion = Get-VstsInput -Name Version
 
 # Install Azure PowerShell modules
-Find-Module Az.Accounts | Install-Module -Force
-Find-Module Az.Blueprint | Install-Module -Force
+if (Get-Module -ListAvailable -Name Az.Accounts) {
+   Write-Output "Az.Accounts module is allready installed."
+}
+else {
+   Find-Module Az.Accounts | Install-Module -Force
+}
+
+if (Get-Module -ListAvailable -Name Az.Blueprint) {
+   Write-Output "Az.Blueprint module is allready installed."
+}
+else {
+   Find-Module Az.Blueprint | Install-Module -Force
+}
 
 # Set Blueprint Scope (Subscription / Management Group)
 if ($ServiceConnectionScope -eq 'ManagementGroup' -and $BlueprintAltSubscription -eq "false" ) {
