@@ -64,7 +64,7 @@ if ($BlueprintVersion -eq 'latest') {
  }
 
 # Add Blueprint ID
-$body = Get-Content -Raw -Path $AssignmentFilePath | ConvertFrom-Json
+$body = Get-Content -Raw -Path $AssignmentFilePath | ConvertFrom-Json -Depth 10
 $body.properties.blueprintId = $BluePrintObject.id
 $body | ConvertTo-Json -Depth 5 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
 
