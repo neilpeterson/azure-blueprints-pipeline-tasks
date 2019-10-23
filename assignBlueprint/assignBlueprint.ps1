@@ -28,28 +28,40 @@ $Wait = Get-VstsInput -Name Wait
 $Timeout = Get-VstsInput -Name Timeout
 $BlueprintVersion = Get-VstsInput -Name BlueprintVersion
 
+function Write-Log {
+    param (
+        [string]$log
+    )
+
+    write-output "** Assign Blueprint log: $log **"
+}
+
 # Install Azure PowerShell modules
 if (Get-Module -ListAvailable -Name Az.Accounts) {
-    Write-Output "Az.Accounts module is allready installed."
+    Write-Log("Az.Accounts module is allready installed.")
 }
 else {
     Find-Module Az.Accounts | Install-Module -Force
+    Write-Log("Az.Accounts module is not installed, installing now.")
 }
 
 if (Get-Module -ListAvailable -Name Az.Blueprint) {
-    Write-Output "Az.Blueprint module is allready installed."
+    Write-Log("Az.Blueprints module is allready installed.")
 }
 else {
     Find-Module Az.Blueprint | Install-Module -Force
+    Write-Log("Az.Blueprints module is not installed, installing now.")
 }
 
 # Set Blueprint Scope (Subscription / Management Group)
 if ($ServiceConnectionScope -eq 'ManagementGroup') {
     $BlueprintScope = "-ManagementGroupId $BlueprintManagementGroup"
+    Write-Log("Blueprint definition is located at Management Group $BlueprintManagementGroup.")
 }
 
 if ($ServiceConnectionScope -eq 'Subscription') {
     $BlueprintScope = "-SubscriptionId $SubscriptionID"
+    Write-Log("Blueprint definition is located at Subscription Group $SubscriptionID.")
 }
 
 # Connect to Azure
@@ -59,11 +71,14 @@ Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -Enviro
 # Get Blueprint object
 if ($BlueprintVersion -eq 'latest') {
     $BluePrintObject = Invoke-Expression "Get-AzBlueprint -Name $BlueprintName $BlueprintScope"
+    Write-Log("Get Blueprint $BlueprintName, version latest.")
+
  } else {
     $BluePrintObject = Invoke-Expression "Get-AzBlueprint -Name $BlueprintName $BlueprintScope -Version $BlueprintVersion"
+    Write-Log("Get Blueprint $BlueprintName, version $BlueprintVersion.")
  }
 
-# Add Blueprint ID
+# Add Blueprint ID to assignment file
 $body = Get-Content -Raw -Path $AssignmentFilePath | ConvertFrom-Json
 $body.properties.blueprintId = $BluePrintObject.id
 $body | ConvertTo-Json -Depth 5 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
@@ -73,8 +88,10 @@ $AssignmentObject = Get-AzBlueprintAssignment -Name $AssignmentName -erroraction
 
 if ($AssignmentObject) {
     Set-AzBlueprintAssignment -Name $AssignmentName -Blueprint $bluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
+    Write-Log("Assignment $AssignmentName exsists, using Set-AzBlueprintAssignment.")
 } else {
     New-AzBlueprintAssignment -Name $AssignmentName -Blueprint $bluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
+    Write-Log("Assignment $AssignmentName does not exsists, using New-AzBlueprintAssignment.")
 }
 
 # Wait for assignment to complete
@@ -85,12 +102,14 @@ if ($Wait -eq "true") {
     while (($sw.elapsed -lt $timeout) -and ($AssignemntStatus.ProvisioningState -ne "Succeeded") -and ($AssignemntStatus.ProvisioningState -ne "Failed")) {
         $AssignemntStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
         if ($AssignemntStatus.ProvisioningState -eq "failed") {
-            Throw "Assignment Failed. See Azure Portal for datails."
+            Write-Log("Assignment Failed. See Azure Portal for datails.")
             break
         }
     }
 
     if ($AssignemntStatus.ProvisioningState -ne "Succeeded") {
-        Write-Warning "Assignment has timed out, activity is exiting."
+        Write-Log("Assignment has timed out, activity is exiting.")
+    } else {
+        Write-Log("Assignment completed.")
     }
 }
