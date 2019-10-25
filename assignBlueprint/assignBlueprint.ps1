@@ -80,7 +80,7 @@ if ($BlueprintVersion -eq 'latest') {
 
 # Add Blueprint ID to assignment file
 $body = Get-Content -Raw -Path $AssignmentFilePath | ConvertFrom-Json
-$body.properties.blueprintId = $BluePrintObject.id
+$body.properties | Add-Member -Name "blueprintId" -value $BluePrintObject.id -MemberType NoteProperty -Force
 $body | ConvertTo-Json -Depth 10 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
 
 # Create Blueprint assignment

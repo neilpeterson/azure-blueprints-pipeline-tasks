@@ -51,3 +51,5 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 **10-25-2019 v1.5.4** - [Issue 42](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/42)
 
 **10-25-2019 v1.5.5** - [Issue 33](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/33)
+
+**10-25-2019 v1.5.6** - [Issue 48](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/48)
