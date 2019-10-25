@@ -47,3 +47,5 @@ Import the .vsix file into your own Visual Studio Marketplace - https://marketpl
 **9-12-2019 v1.5.0** - Added support for soverign cloud environments. [Issue 36](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/36)
 
 **9-23-2019 v1.5.1** - [Issue 38](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/38), [Issue 35](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/35), [Issue 30](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/30)
+
+**10-25-2019 v1.5.4** - [Issue 42](https://github.com/neilpeterson/azure-blueprints-pipeline-tasks/issues/42)
