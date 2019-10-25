@@ -68,7 +68,7 @@ Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -Enviro
 
 # Create Blueprint
 write-output "Creating Blueprint"
-Invoke-Expression "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath $BlueprintPath $BlueprintScope -Force"
+Invoke-Expression "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath '$BlueprintPath' $BlueprintScope -Force"
 
 # Publish blueprint if publish
 write-output "Publishing Blueprint"
