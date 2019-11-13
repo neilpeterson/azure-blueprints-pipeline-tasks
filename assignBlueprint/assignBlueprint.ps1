@@ -111,7 +111,6 @@ if ($Wait -eq "true") {
     if ($AssignemntStatus.ProvisioningState -ne "Succeeded") {
         Write-Host "##vso[task.logissue type=warning;]Assignment has timed out, either increase timout value or check portal for results"
         Write-Log("Assignment has timed out, activity is exiting.")
-
     } else {
         Write-Log("Assignment completed.")
     }
