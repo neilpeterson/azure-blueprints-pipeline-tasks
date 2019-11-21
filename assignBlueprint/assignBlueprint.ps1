@@ -102,15 +102,13 @@ if ($Wait -eq "true") {
     while (($sw.elapsed -lt $timeout) -and ($AssignemntStatus.ProvisioningState -ne "Succeeded") -and ($AssignemntStatus.ProvisioningState -ne "Failed")) {
         $AssignemntStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
         if ($AssignemntStatus.ProvisioningState -eq "failed") {
-            Write-Host "##vso[task.logissue type=error;]Assignment Failed."
-            # Write-Log("Assignment Failed. See Azure Portal for datails.")
+            Write-Host "##vso[task.logissue type=error;]Assignment Failed, see Azure portal for results."
             break
         }
     }
 
-    if ($AssignemntStatus.ProvisioningState -ne "Succeeded") {
+    if ($AssignemntStatus.ProvisioningState -ne "Succeeded" -and $AssignemntStatus.ProvisioningState -ne "Failed") {
         Write-Host "##vso[task.logissue type=warning;]Assignment has timed out, either increase timout value or check portal for results"
-        # Write-Log("Assignment has timed out, activity is exiting.")
     } else {
         Write-Log("Assignment completed.")
     }
