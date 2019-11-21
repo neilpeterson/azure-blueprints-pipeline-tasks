@@ -13,7 +13,7 @@
             "path": "docs/overview.md"
         }
     },
-	"public": false,
+	"public": true,
 	"galleryFlags": [
         "Preview"
     ],
