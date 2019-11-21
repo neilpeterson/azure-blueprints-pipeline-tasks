@@ -1,8 +1,8 @@
 {
-	"id": "35d27b4a-51dc-4eca-85a6-5635231b613d",
-	"name": "AssignBlueprint",
-	"friendlyName": "Assign Azure Blueprint",
-	"description": "Assigns an Azure Blueprint",
+	"id": "0b647caa-f126-42ca-886b-df2a8ca20801",
+	"name": "AssignBlueprintDev",
+	"friendlyName": "Assign Azure Blueprint Dev",
+	"description": "Assigns an Azure Blueprint Dev",
 	"helpMarkDown": "",
 	"category": "Build",
 	"visibility": [
@@ -13,8 +13,8 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 5,
-		"Patch": 6
+		"Minor": 0,
+		"Patch": 1
 	},
 	"instanceNameFormat": "Assign Azure Blueprint",
 	"inputs": [{

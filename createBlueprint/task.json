@@ -1,8 +1,8 @@
 {
-	"id": "1a8623d7-1d5c-423c-9d92-5e9587bbb02a",
-	"name": "CreateBlueprint",
-	"friendlyName": "Create Azure Blueprint",
-	"description": "Creates an Azure Blueprint",
+	"id": "2430fd0c-d8b6-48a4-8d94-a337f06f259f",
+	"name": "CreateBlueprintDev",
+	"friendlyName": "Create Azure Blueprint Dev",
+	"description": "Creates an Azure Blueprint Dev",
 	"helpMarkDown": "",
 	"category": "Build",
 	"visibility": [
@@ -13,8 +13,8 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 5,
-		"Patch": 6
+		"Minor": 0,
+		"Patch": 1
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
