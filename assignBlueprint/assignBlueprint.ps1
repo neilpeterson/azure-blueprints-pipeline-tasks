@@ -36,6 +36,11 @@ function Write-Log {
     write-output "** Assign Blueprint log: $log **"
 }
 
+# fall back on SubscriptionID of the service connection when no target SubscriptionID supplied
+if ([String]::IsNullOrEmpty($TargetSubscriptionID) -eq $true) {
+    $TargetSubscriptionID = $SubscriptionID
+}
+
 # Install Azure PowerShell modules
 if (Get-Module -ListAvailable -Name Az.Accounts) {
     Write-Log("Az.Accounts module is allready installed.")
