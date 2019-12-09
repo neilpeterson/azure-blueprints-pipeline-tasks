@@ -89,7 +89,7 @@ $body.properties | Add-Member -Name "blueprintId" -value $BluePrintObject.id -Me
 $body | ConvertTo-Json -Depth 10 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
 
 # Create Blueprint assignment
-$AssignmentObject = Get-AzBlueprintAssignment -Name $AssignmentName -erroraction 'silentlycontinue'
+$AssignmentObject = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID -erroraction 'silentlycontinue'
 
 if ($AssignmentObject) {
     Set-AzBlueprintAssignment -Name $AssignmentName -Blueprint $bluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
