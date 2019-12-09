@@ -104,15 +104,15 @@ if ($Wait -eq "true") {
     $timeout = new-timespan -Seconds $Timeout
     $sw = [diagnostics.stopwatch]::StartNew()
 
-    while (($sw.elapsed -lt $timeout) -and ($AssignemntStatus.ProvisioningState -ne "Succeeded") -and ($AssignemntStatus.ProvisioningState -ne "Failed")) {
-        $AssignemntStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
-        if ($AssignemntStatus.ProvisioningState -eq "failed") {
+    while (($sw.elapsed -lt $timeout) -and ($AssignmentStatus.ProvisioningState -ne "Succeeded") -and ($AssignmentStatus.ProvisioningState -ne "Failed")) {
+        $AssignmentStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
+        if ($AssignmentStatus.ProvisioningState -eq "failed") {
             Write-Host "##vso[task.logissue type=error;]Assignment Failed, see Azure portal for results."
             break
         }
     }
 
-    if ($AssignemntStatus.ProvisioningState -ne "Succeeded" -and $AssignemntStatus.ProvisioningState -ne "Failed") {
+    if ($AssignmentStatus.ProvisioningState -ne "Succeeded" -and $AssignmentStatus.ProvisioningState -ne "Failed") {
         Write-Host "##vso[task.logissue type=warning;]Assignment has timed out, either increase timout value or check portal for results"
     } else {
         Write-Log("Assignment completed.")
