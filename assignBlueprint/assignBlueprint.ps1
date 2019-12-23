@@ -36,6 +36,11 @@ function Write-Log {
     write-output "** Assign Blueprint log: $log **"
 }
 
+# fall back on SubscriptionID of the service connection when no target SubscriptionID supplied
+if ([String]::IsNullOrEmpty($TargetSubscriptionID) -eq $true) {
+    $TargetSubscriptionID = $SubscriptionID
+}
+
 # Install Azure PowerShell modules
 if (Get-Module -ListAvailable -Name Az.Accounts) {
     Write-Log("Az.Accounts module is allready installed.")
@@ -84,7 +89,7 @@ $body.properties | Add-Member -Name "blueprintId" -value $BluePrintObject.id -Me
 $body | ConvertTo-Json -Depth 10 | Out-File -FilePath $AssignmentFilePath -Encoding utf8 -Force
 
 # Create Blueprint assignment
-$AssignmentObject = Get-AzBlueprintAssignment -Name $AssignmentName -erroraction 'silentlycontinue'
+$AssignmentObject = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID -erroraction 'silentlycontinue'
 
 if ($AssignmentObject) {
     Set-AzBlueprintAssignment -Name $AssignmentName -Blueprint $bluePrintObject -AssignmentFile $AssignmentFilePath -SubscriptionId $TargetSubscriptionID
@@ -99,15 +104,15 @@ if ($Wait -eq "true") {
     $timeout = new-timespan -Seconds $Timeout
     $sw = [diagnostics.stopwatch]::StartNew()
 
-    while (($sw.elapsed -lt $timeout) -and ($AssignemntStatus.ProvisioningState -ne "Succeeded") -and ($AssignemntStatus.ProvisioningState -ne "Failed")) {
-        $AssignemntStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
-        if ($AssignemntStatus.ProvisioningState -eq "failed") {
+    while (($sw.elapsed -lt $timeout) -and ($AssignmentStatus.ProvisioningState -ne "Succeeded") -and ($AssignmentStatus.ProvisioningState -ne "Failed")) {
+        $AssignmentStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
+        if ($AssignmentStatus.ProvisioningState -eq "failed") {
             Write-Host "##vso[task.logissue type=error;]Assignment Failed, see Azure portal for results."
             break
         }
     }
 
-    if ($AssignemntStatus.ProvisioningState -ne "Succeeded" -and $AssignemntStatus.ProvisioningState -ne "Failed") {
+    if ($AssignmentStatus.ProvisioningState -ne "Succeeded" -and $AssignmentStatus.ProvisioningState -ne "Failed") {
         Write-Host "##vso[task.logissue type=warning;]Assignment has timed out, either increase timout value or check portal for results"
     } else {
         Write-Log("Assignment completed.")
