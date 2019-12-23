@@ -108,7 +108,7 @@ if ($Wait -eq "true") {
         $AssignmentStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
         if ($AssignmentStatus.ProvisioningState -eq "failed") {
             Write-Host "##vso[task.logissue type=error;]Assignment Failed, see Azure portal for results."
-            break
+            exit 1
         }
     }
 
