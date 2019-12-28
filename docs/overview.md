@@ -38,12 +38,14 @@ steps:
 - task: nepeters.azure-blueprints.AssignBlueprint.AssignBlueprint@1
   displayName: 'Assign Azure Blueprint'
   inputs:
-    azureSubscription: 'nepeters-devops-mgmt'
-    AssignmentName: 'blueprints-demo-assignment'
-    BlueprintName: 'blueprints-demo'
+    azureSubscription: 'nepeters-internal'
+    AssignmentName: 'prod-test-one'
+    BlueprintName: 'prod-test-one'
     ParametersFile: 'assign/assign-blueprint.json'
-    SubscriptionID: '00000000-0000-0000-0000-000000000000'
+    AlternateSubscription: true
+    AltSubscriptionID: '00000000-0000-0000-0000-000000000000'
     Wait: true
+    StopOnFailure: true
 ```
 
 All configuration parameters:
@@ -57,3 +59,4 @@ All configuration parameters:
 | SubscriptionID | The Azure subscription at which the blueprint is stored and / or where the blueprint will be assigned.  | string | false ||
 | Wait | Wait for assignment to complete before moving to the next task.  | boolean | false | false |
 | Timeout | Time in seconds before wait timeout'  | string | false | 240 |
+| StopOnFailure | Will cause the pipeline to fail on assignment failure | boolean | false | false |
