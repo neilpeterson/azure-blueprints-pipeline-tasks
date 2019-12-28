@@ -14,14 +14,14 @@
 	"version": {
 		"Major": 1,
 		"Minor": 5,
-		"Patch": 7
+		"Patch": 8
 	},
 	"instanceNameFormat": "Assign Azure Blueprint",
 	"inputs": [{
 			"name": "ConnectedServiceName",
 			"aliases": ["azureSubscription"],
 			"type": "connectedService:AzureRM",
-			"label": "Azure Service Connection",
+			"label": "Azure Service Connection (location of Blueprint)",
 			"defaultValue": "",
 			"required": true,
 			"helpMarkDown": "Azure service connection for the Blueprints task. This can be an Azure Management Group or Subscription.",
@@ -62,12 +62,21 @@
 			"helpMarkDown": "A JSON file containing the assignment details and parameter values."
 		},
 		{
-			"name": "SubscriptionID",
+			"name": "AlternateSubscription",
+			"type": "boolean",
+			"label": "Provide Subscription ID (requires Management Group scope)",
+			"defaultValue": "false",
+			"required": true,
+			"helpMarkDown": "When using a Service Connection that is scoped to a management group, specify the child subscription for the Blueprint assignment."
+		},
+		{
+			"name": "AltSubscriptionID",
 			"type": "string",
-			"label": "Subscription ID for Blueprint Assignment",
+			"label": "Subscription Id",
 			"defaultValue": "",
 			"required": false,
-			"helpMarkDown": "Subscription ID for assignment."
+			"helpMarkDown": "When using a Service Connection that is scoped to a management group, specify the child subscription for the Blueprint assignment.",
+			"visibleRule": "AlternateSubscription = true"
 		},
 		{
 			"name": "Wait",
@@ -84,6 +93,15 @@
 			"defaultValue": "240",
 			"required": false,
 			"helpMarkDown": "Time in seconds before wait timeout.",
+			"visibleRule": "Wait = true"
+		},
+		{
+			"name": "StopOnFailure",
+			"type": "boolean",
+			"label": "Stop on Failure",
+			"defaultValue": "false",
+			"required": false,
+			"helpMarkDown": "Select to fail the build when an assignment failure occours.",
 			"visibleRule": "Wait = true"
 		}
 	],

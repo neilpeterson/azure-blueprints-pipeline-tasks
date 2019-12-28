@@ -18,27 +18,22 @@ $Environment = $Endpoint.Data.Environment
 $ServiceConnectionScope = $Endpoint.Data.scopeLevel
 $BlueprintManagementGroup = $Endpoint.Data.managementGroupId
 $SubscriptionID = $Endpoint.Data.SubscriptionId
+$TargetSubscriptionID = Get-VstsInput -Name AltSubscriptionID # Alternate (not from service connection) subscription id.
 
 # Get Blueprint Assignment details
 $BlueprintName = Get-VstsInput -Name BlueprintName
 $AssignmentName = Get-VstsInput -Name AssignmentName
 $AssignmentFilePath = Get-VstsInput -Name ParametersFile
-$TargetSubscriptionID = Get-VstsInput -Name SubscriptionID
 $Wait = Get-VstsInput -Name Wait
 $Timeout = Get-VstsInput -Name Timeout
 $BlueprintVersion = Get-VstsInput -Name BlueprintVersion
+$StopOnError = Get-VstsInput -Name StopOnFailure
 
 function Write-Log {
     param (
         [string]$log
     )
-
     write-output "** Assign Blueprint log: $log **"
-}
-
-# fall back on SubscriptionID of the service connection when no target SubscriptionID supplied
-if ([String]::IsNullOrEmpty($TargetSubscriptionID) -eq $true) {
-    $TargetSubscriptionID = $SubscriptionID
 }
 
 # Install Azure PowerShell modules
@@ -60,13 +55,19 @@ else {
 
 # Set Blueprint Scope (Subscription / Management Group)
 if ($ServiceConnectionScope -eq 'ManagementGroup') {
-    $BlueprintScope = "-ManagementGroupId $BlueprintManagementGroup"
     Write-Log("Blueprint definition is located at Management Group $BlueprintManagementGroup.")
+    $BlueprintScope = "-ManagementGroupId $BlueprintManagementGroup"
+
+    # Check for subscription ID
+    if ([String]::IsNullOrEmpty($TargetSubscriptionID) -eq $true) {
+        throw "Target subscription not specified."
+    }
 }
 
 if ($ServiceConnectionScope -eq 'Subscription') {
-    $BlueprintScope = "-SubscriptionId $SubscriptionID"
     Write-Log("Blueprint definition is located at Subscription Group $SubscriptionID.")
+    $BlueprintScope = "-SubscriptionId $SubscriptionID"
+    $TargetSubscriptionID = $SubscriptionID
 }
 
 # Connect to Azure
@@ -107,8 +108,11 @@ if ($Wait -eq "true") {
     while (($sw.elapsed -lt $timeout) -and ($AssignmentStatus.ProvisioningState -ne "Succeeded") -and ($AssignmentStatus.ProvisioningState -ne "Failed")) {
         $AssignmentStatus = Get-AzBlueprintAssignment -Name $AssignmentName -SubscriptionId $TargetSubscriptionID
         if ($AssignmentStatus.ProvisioningState -eq "failed") {
-            Write-Host "##vso[task.logissue type=error;]Assignment Failed, see Azure portal for results."
-            exit 1
+            if ($StopOnError -eq "true") {
+                throw "Assignment Failed, see Azure portal for results."
+            } else {
+                Write-Host "##vso[task.logissue type=error;]Assignment Failed, see Azure portal for results."
+            }
         }
     }
 

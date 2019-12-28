@@ -5,7 +5,7 @@
 	"description": "Creates an Azure Blueprint",
 	"helpMarkDown": "",
 	"category": "Build",
-	"visibility": [
+	"visibility": [1a8623d7-1d5c-423c-9d92-5e9587bbb02a
 		"Preview",
 		"Build",
 		"Release"
@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 5,
-		"Patch": 7
+		"Patch": 8
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
