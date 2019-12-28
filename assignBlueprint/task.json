@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 5,
-		"Patch": 8
+		"Patch": 9
 	},
 	"instanceNameFormat": "Assign Azure Blueprint",
 	"inputs": [{
@@ -70,7 +70,7 @@
 			"helpMarkDown": "When using a Service Connection that is scoped to a management group, specify the child subscription for the Blueprint assignment."
 		},
 		{
-			"name": "AltSubscriptionID",
+			"name": "SubscriptionID",
 			"type": "string",
 			"label": "Subscription Id",
 			"defaultValue": "",

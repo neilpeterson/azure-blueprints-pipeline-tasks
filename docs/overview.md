@@ -43,7 +43,7 @@ steps:
     BlueprintName: 'prod-test-one'
     ParametersFile: 'assign/assign-blueprint.json'
     AlternateSubscription: true
-    AltSubscriptionID: '00000000-0000-0000-0000-000000000000'
+    SubscriptionID: '00000000-0000-0000-0000-000000000000'
     Wait: true
     StopOnFailure: true
 ```

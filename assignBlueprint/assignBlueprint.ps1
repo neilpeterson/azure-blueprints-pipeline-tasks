@@ -18,7 +18,7 @@ $Environment = $Endpoint.Data.Environment
 $ServiceConnectionScope = $Endpoint.Data.scopeLevel
 $BlueprintManagementGroup = $Endpoint.Data.managementGroupId
 $SubscriptionID = $Endpoint.Data.SubscriptionId
-$TargetSubscriptionID = Get-VstsInput -Name AltSubscriptionID # Alternate (not from service connection) subscription id.
+$TargetSubscriptionID = Get-VstsInput -Name SubscriptionID # Alternate (not from service connection) subscription id.
 
 # Get Blueprint Assignment details
 $BlueprintName = Get-VstsInput -Name BlueprintName
