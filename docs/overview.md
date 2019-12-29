@@ -56,6 +56,7 @@ All configuration parameters:
 | BlueprintName | The blueprint name. | string | true | |
 | BlueprintVersion | The version of the blueprint to assign | string | false | latest |
 | ParametersFile | The path to a JSON file containing the assignment details and parameter values. | string | true | |
+| AlternateSubscription | When the task is scoped to a management group, select to specify the subscription id for assignment. | boolean | false | false |
 | SubscriptionID | The Azure subscription at which the blueprint is stored and / or where the blueprint will be assigned.  | string | false ||
 | Wait | Wait for assignment to complete before moving to the next task.  | boolean | false | false |
 | Timeout | Time in seconds before wait timeout'  | string | false | 240 |
