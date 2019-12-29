@@ -13,13 +13,8 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-<<<<<<< HEAD
 		"Minor": 6,
 		"Patch": 0
-=======
-		"Minor": 5,
-		"Patch": 9
->>>>>>> master
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
