@@ -26,6 +26,7 @@ $BlueprintName = Get-VstsInput -Name BlueprintName
 $BlueprintPath = Get-VstsInput -Name BlueprintPath
 $PublishBlueprint = Get-VstsInput -Name PublishBlueprint
 $BlueprintVersion = Get-VstsInput -Name Version
+$BlueprintIncludeSubFolders = Get-VstsInput -Name IncludeSubFolders
 
 # Install Azure PowerShell modules
 if (Get-Module -ListAvailable -Name Az.Accounts) {
@@ -55,12 +56,18 @@ if ($ServiceConnectionScope -eq 'Subscription') {
    $BlueprintScope = "-SubscriptionId $BlueprintSubscriptionID"
 }
 
+# Set flag for including subfolders
+$IncludeSubFoldersFlag = ""
+if ($BlueprintIncludeSubFolders -eq 'true') {
+   $IncludeSubFoldersFlag = "-IncludeSubFolders"
+}
+
 # Verbose output
 write-output "**Output from Extension**"
 write-output "Blueprint Name: $BlueprintName"
 write-output "Blueprint Path: $BlueprintPath"
 write-output "Blueprint Scope: $BlueprintScope"
-write-output "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath $BlueprintPath $BlueprintScope -Force"
+write-output "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath '$BlueprintPath' $IncludeSubFoldersFlag $BlueprintScope -Force"
 
 # Connect to Azure
 $Creds = New-Object System.Management.Automation.PSCredential ($ClientId, $ClientSecret)
@@ -68,7 +75,7 @@ Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $Creds -Enviro
 
 # Create Blueprint
 write-output "Creating Blueprint"
-Invoke-Expression "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath '$BlueprintPath' $BlueprintScope -Force"
+Invoke-Expression "Import-AzBlueprintWithArtifact -Name $BlueprintName -InputPath '$BlueprintPath' $IncludeSubFoldersFlag $BlueprintScope -Force"
 
 # Publish blueprint if publish
 write-output "Publishing Blueprint"

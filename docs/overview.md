@@ -27,7 +27,8 @@ All configuration parameters:
 | AlternateLocation | Give a value of `true` if the blueprint should be created at an alternate subscription (requires Management Group scope). | bool | false | |
 | AlternateSubscription | Alternate subscription id (requires Management Group scope). | string | false | |
 | publishBlueprint | A value of true indicates the blueprint should be published. | boolean | false | true |
-| version | A value of Increment will increment the version number if the version is an integer'. | string | false | increment |
+| version | A value of Increment will increment the version number if the version is an integer. | string | false | increment |
+| IncludeSubFolders | When set to true, artifacts in subfolders of artifacts-folder will be included. | boolean | false | false |
 
 ## Assign Blueprint
 

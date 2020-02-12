@@ -77,6 +77,14 @@
 			"required": false,
 			"helpMarkDown": "Blueprint version. A value of 'Increment' will increment the version number if the version is an integer.",
 			"visibleRule": "PublishBlueprint = true"
+		},
+		{
+			"name": "IncludeSubFolders",
+			"type": "boolean",
+			"label": "Include SubFolders",
+			"defaultValue": "false",
+			"required": false,
+			"helpMarkDown": "When set to true, artifacts in subfolders of artifacts-folder will be included."
 		}
 	],
 	"dataSourceBindings": [],
