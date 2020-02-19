@@ -14,7 +14,7 @@
 	"version": {
 		"Major": 1,
 		"Minor": 7,
-		"Patch": 0
+		"Patch": 1
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
 	"inputs": [{
@@ -46,20 +46,20 @@
 			"helpMarkDown": "Path to a directory with a blueprint.json file and a directory named artifacts."
 		},
 		{
-			"name": "AlternateLocation",
-			"type": "boolean",
-			"label": "Create Blueprint at child subscription (requires Management Group scope)",
-			"defaultValue": "false",
-			"required": true,
-			"helpMarkDown": "By default, Blueprints are created at the Management Group or subscription associated with the Azure Pipeline service connection. Select this option to provide an alternate subscription."
-		},
-		{
 			"name": "IncludeSubFolders",
 			"type": "boolean",
 			"label": "Include SubFolders",
 			"defaultValue": "false",
 			"required": false,
 			"helpMarkDown": "When set to true, artifacts in subfolders of artifacts-folder will be included."
+		},
+		{
+			"name": "AlternateLocation",
+			"type": "boolean",
+			"label": "Create Blueprint at child subscription (requires Management Group scope)",
+			"defaultValue": "false",
+			"required": true,
+			"helpMarkDown": "By default, Blueprints are created at the Management Group or subscription associated with the Azure Pipeline service connection. Select this option to provide an alternate subscription."
 		},
 		{
 			"name": "AlternateSubscription",
