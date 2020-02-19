@@ -8,7 +8,7 @@ Create a task with the following schema to create a blueprint.
 
 ```
 steps:
-- task: nepeters.azure-blueprints-test.CreateBlueprint.CreateBlueprintTest@1
+- task: nepeters.azure-blueprints.CreateBlueprint.CreateBlueprint@1
   displayName: 'Create Azure Blueprint'
   inputs:
     azureSubscription: 'nepeters-subscription'
