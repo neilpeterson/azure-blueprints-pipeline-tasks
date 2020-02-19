@@ -11,10 +11,12 @@ steps:
 - task: nepeters.azure-blueprints.CreateBlueprint.CreateBlueprint@1
   displayName: 'Create Azure Blueprint'
   inputs:
-    azureSubscription: 'nepeters-devops-mgmt'
+    azureSubscription: 'nepeters-subscription'
     BlueprintName: 'blueprints-demo'
-    BlueprintPath: create
+    BlueprintPath: ./create
+    IncludeSubFolders: true
     PublishBlueprint: true
+    ChangeNote: 'Added new artifacts.'
 ```
 
 All configuration parameters:
@@ -26,9 +28,11 @@ All configuration parameters:
 | blueprintPath | The path to a directory that contains the blueprint.json file.| string | true | |
 | AlternateLocation | Give a value of `true` if the blueprint should be created at an alternate subscription (requires Management Group scope). | bool | false | |
 | AlternateSubscription | Alternate subscription id (requires Management Group scope). | string | false | |
+| IncludeSubFolders | When set to true, artifacts in subfolders of artifacts-folder will be included. | boolean | false | false |
 | publishBlueprint | A value of true indicates the blueprint should be published. | boolean | false | true |
 | version | A value of Increment will increment the version number if the version is an integer. | string | false | increment |
-| IncludeSubFolders | When set to true, artifacts in subfolders of artifacts-folder will be included. | boolean | false | false |
+| ChangeNote | Notes to describe the contents of this blueprint version. | string | false | |
+
 
 ## Assign Blueprint
 

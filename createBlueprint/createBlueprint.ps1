@@ -27,6 +27,7 @@ $BlueprintPath = Get-VstsInput -Name BlueprintPath
 $PublishBlueprint = Get-VstsInput -Name PublishBlueprint
 $BlueprintVersion = Get-VstsInput -Name Version
 $BlueprintIncludeSubFolders = Get-VstsInput -Name IncludeSubFolders
+$BlueprintChangeNote = Get-VstsInput -Name ChangeNote
 
 # Install Azure PowerShell modules
 if (Get-Module -ListAvailable -Name Az.Accounts) {
@@ -92,5 +93,9 @@ if ($PublishBlueprint -eq "true") {
    }
 
    # Publish blueprint
-   Publish-AzBlueprint -Blueprint $BluePrintObject -Version $BlueprintVersion
+   if ($BlueprintChangeNote) {
+      Publish-AzBlueprint -Blueprint $BluePrintObject -Version $BlueprintVersion -ChangeNote $BlueprintChangeNote
+   } else {
+      Publish-AzBlueprint -Blueprint $BluePrintObject -Version $BlueprintVersion
+   }
 }

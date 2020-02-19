@@ -13,7 +13,7 @@
 	"author": "Neil Peterson",
 	"version": {
 		"Major": 1,
-		"Minor": 6,
+		"Minor": 7,
 		"Patch": 0
 	},
 	"instanceNameFormat": "Create Azure Blueprint",
@@ -54,6 +54,14 @@
 			"helpMarkDown": "By default, Blueprints are created at the Management Group or subscription associated with the Azure Pipeline service connection. Select this option to provide an alternate subscription."
 		},
 		{
+			"name": "IncludeSubFolders",
+			"type": "boolean",
+			"label": "Include SubFolders",
+			"defaultValue": "false",
+			"required": false,
+			"helpMarkDown": "When set to true, artifacts in subfolders of artifacts-folder will be included."
+		},
+		{
 			"name": "AlternateSubscription",
 			"type": "string",
 			"label": "Subscription Id",
@@ -79,12 +87,12 @@
 			"visibleRule": "PublishBlueprint = true"
 		},
 		{
-			"name": "IncludeSubFolders",
-			"type": "boolean",
-			"label": "Include SubFolders",
-			"defaultValue": "false",
+			"name": "ChangeNote",
+			"type": "string",
+			"label": "Blueprint Changenote",
 			"required": false,
-			"helpMarkDown": "When set to true, artifacts in subfolders of artifacts-folder will be included."
+			"helpMarkDown": "Notes to describe the contents of this blueprint version.",
+			"visibleRule": "PublishBlueprint = true"
 		}
 	],
 	"dataSourceBindings": [],
