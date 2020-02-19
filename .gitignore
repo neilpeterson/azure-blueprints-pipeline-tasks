@@ -1,1 +1,2 @@
-*.visx
+*.vsix
+.vs/
